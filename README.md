@@ -10,7 +10,7 @@ This software is tested on the following environment.
 - SearchProvider: Solr
 
 ## Installation
-No released yet. Clone this repository and build it locally.
+Not released yet. Clone this repository and build it locally.
 
 ## Usage
 1. Add `Tags` field to a page template.
@@ -47,7 +47,7 @@ public class RecommendExample
 |`TagBasedRecommender.SearchTemplate`|`ID`|A template ID to use filtering recommendation. |empty (All templates)|
 |`TagBasedRecommender.StoredItemCount`|`int`|A length of items stored in a cookie value.|`20`|
 |`TagBasedRecommender.BoostMultiplicand`|`float`|A value to be added to boosting when a tag is matched.|`1`|
-|`TagBasedRecommender.Cookie.Name`|`string`|A cookie's name (required).|`TagBasedrec_items`|
+|`TagBasedRecommender.Cookie.Name`|`string`|A cookie's name (required).|`tagbasedrec_items`|
 |`TagBasedRecommender.Cookie.Lifespan`|`int`|A cookie's lifespan to set to `Expire` attribute (in days).|`30`|
 |`TagBasedRecommender.Cookie.Domain`|`string`|A cookie's `Domain` attribute.|empty|
 |`TagBasedRecommender.Cookie.Path`|`string`|A cookies's `Path` attribute.|`/`|
@@ -76,7 +76,7 @@ public class CategoryTagsResolver : IItemTagsResolver
 }
 ```
 
-And replace the default class by apply the following configuration (This is just an example).
+And replace the default resolver by applying the following configuration (This is just an example).
 
 ```xml
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
