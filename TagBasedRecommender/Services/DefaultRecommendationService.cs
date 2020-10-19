@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace TagBaseRecommender.Services
+namespace TagBasedRecommender.Services
 {
     public class DefaultRecommendationService<T> : IRecommendationService where T : SearchResultItem
     {

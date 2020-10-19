@@ -1,11 +1,11 @@
 ﻿using Sitecore;
 using Sitecore.Data;
 
-namespace TagBaseRecommender
+namespace TagBasedRecommender
 {
     public static class KnownSettings
     {
-        private static string GetSetting(string name, string @default = null) => Sitecore.Configuration.Settings.GetSetting($"TagBaseRecommender.{name}", @default);
+        private static string GetSetting(string name, string @default = null) => Sitecore.Configuration.Settings.GetSetting($"TagBasedRecommender.{name}", @default);
 
         public static string SearchField = GetSetting("SearchField");
         public static ID SearchTemplate = MainUtil.GetID(GetSetting("SearchTemplate"), ID.Null);

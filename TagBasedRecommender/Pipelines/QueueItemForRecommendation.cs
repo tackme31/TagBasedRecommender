@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 
-namespace TagBaseRecommender.Pipelines
+namespace TagBasedRecommender.Pipelines
 {
     public class QueueItemForRecommendation : HttpRequestProcessor
     {
@@ -14,7 +14,12 @@ namespace TagBaseRecommender.Pipelines
 
         public override void Process(HttpRequestArgs args)
         {
-            if (Context.Item == null || Context.Item.ID != KnownSettings.SearchTemplate)
+            if (Context.Item == null)
+            {
+                return;
+            }
+
+            if (!KnownSettings.SearchTemplate.IsNull && Context.Item.TemplateID != KnownSettings.SearchTemplate)
             {
                 return;
             }

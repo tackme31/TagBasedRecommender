@@ -1,7 +1,7 @@
 ﻿using Sitecore.Data.Items;
 using System.Collections.Generic;
 
-namespace TagBaseRecommender.Services
+namespace TagBasedRecommender.Services
 {
     public interface IItemTagsResolver
     {
