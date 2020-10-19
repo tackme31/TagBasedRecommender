@@ -10,7 +10,6 @@ No releases yet. Clone this repository and build it locally.
 1. Add `Tags` field to a page template.
 1. (Optional) Set the template's ID to `TagBaseRecommender.SearchTemplate` settings.
 ```xml
-<?xml version="1.0" encoding="utf-8"?>
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
   <sitecore>
     <settings>
@@ -52,7 +51,7 @@ public class RecommendExample
 
 ## Customization
 ### Custom Tags
-This library uses item's `Tags` to get recommendation tags (splited at whitespace). This behaviour can be customized by replacing `DefaultItemTagsResolver`.
+This library uses item's `Tags` field to get recommendation tags (splited at whitespace). This behaviour can be customized by replacing `DefaultItemTagsResolver`.
 
 ```csharp
 using TagBaseRecommender.Services;
@@ -74,12 +73,12 @@ public class CategoryTagsResolver : IItemTagsResolver
 And replace the default class by apply the following configuration (This is just an example).
 
 ```xml
-<configuration>
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
   <sitecore>
     <services>
-      <register serviceType="TagBaseRecommender.Services.IItemTagsResolver, TagBaseRecommender"
-                implementationType="Namespace.To.CategoryTagsResolver, AssemblyName"
-                lifetime="Transient"/>
+      <register serviceType="TagBaseRecommender.Services.IItemTagsResolver, TagBaseRecommender">
+        <patch:attribute name="implementationType">Namespace.To.CategoryTagsResolver, AssemblyName</patch:attribute>
+      </register>
     </services>
   </sitecore>
 </configuration>
