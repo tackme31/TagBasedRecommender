@@ -6,7 +6,6 @@ using Sitecore.ContentSearch.SearchTypes;
 using Sitecore.ContentSearch.Utilities;
 using Sitecore.Data;
 using Sitecore.Data.Items;
-using Sitecore.Extensions;
 using Sitecore.StringExtensions;
 using System;
 using System.Collections.Generic;
@@ -34,12 +33,28 @@ namespace TagBasedRecommender.Services
             var index = GetSearchIndex();
             using (var context = index.CreateSearchContext())
             {
+                var query = context.GetQueryable<T>();
+                if (!KnownSettings.SearchTemplate.IsNull)
+                {
+                    query = query.Filter(item => item.TemplateId == KnownSettings.SearchTemplate);
+                }
+
+                if (KnownSettings.FilterStoredItems)
+                {
+                    // Dedupe IDs
+                    var itemIds = new HashSet<ID>();
+                    GetIdsFromCookie().ForEach(id => itemIds.Add(id));
+
+                    query = itemIds.Aggregate(query, (acc, id) => acc.Filter(item => item.ItemId != id));
+
+                }
+
                 var tagsWeight = GetTagsWeight();
                 var boosting = tagsWeight.Keys.Aggregate(
                     PredicateBuilder.Create<T>(item => item.Name.MatchWildcard("*").Boost(0.0f)),
                     (acc, tag) => acc.Or(item => item[KnownSettings.SearchField].Equals(tag).Boost(tagsWeight[tag])));
 
-                var query = ApplyFilterQuery(context.GetQueryable<T>())
+                query = ApplyFilterQuery(query)
                     .Where(boosting)
                     .Take(count)
                     .OrderByDescending(item => item["score"]);
@@ -50,28 +65,9 @@ namespace TagBasedRecommender.Services
 
         protected virtual ISearchIndex GetSearchIndex() => ContentSearchManager.GetIndex((SitecoreIndexableItem)Context.Item);
 
-        protected virtual IQueryable<T> ApplyFilterQuery(IQueryable<T> query)
-        {
-            if (!KnownSettings.SearchTemplate.IsNull)
-            {
-                query = query.Filter(item => item.TemplateId == KnownSettings.SearchTemplate);
-            }
-
-            if (KnownSettings.FilterStoredItems)
-            {
-                // Dedupe IDs
-                var itemIds = new HashSet<ID>();
-                GetIdsFromCookie().ForEach(id => itemIds.Add(id));
-
-                query = itemIds.Aggregate(query, (acc, id) => acc.Filter(item => item.ItemId != id));
-
-            }
-
-            return query
-                .Filter(item => item.Paths.Contains(ItemIDs.ContentRoot))
-                .Filter(item => item.Language == Context.Language.Name);
-        }
-
+        protected virtual IQueryable<T> ApplyFilterQuery(IQueryable<T> query) => query
+            .Filter(item => item.Paths.Contains(ItemIDs.ContentRoot))
+            .Filter(item => item.Language == Context.Language.Name);
 
         private IDictionary<string, float> GetTagsWeight()
         {
