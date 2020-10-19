@@ -38,9 +38,7 @@ namespace TagBasedRecommender.Pipelines
                 cookieItems.Dequeue();
             }
 
-            cookie.Value = string.Join("|", cookieItems);
-
-            HttpContext.Current.Response.Cookies.Set(cookie);
+            HttpContext.Current.Response.Cookies[KnownSettings.Cookie.Name].Value = string.Join("|", cookieItems);
         }
 
         private HttpCookie GetCookie()
@@ -58,6 +56,8 @@ namespace TagBasedRecommender.Pipelines
                     Secure = KnownSettings.Cookie.Secure,
                     HttpOnly = KnownSettings.Cookie.HttpOnly,
                 };
+
+                HttpContext.Current.Response.Cookies.Add(cookie);
             }
 
             return cookie;
