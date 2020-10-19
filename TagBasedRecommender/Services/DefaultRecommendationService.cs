@@ -3,8 +3,10 @@ using Sitecore.ContentSearch;
 using Sitecore.ContentSearch.Linq;
 using Sitecore.ContentSearch.Linq.Utilities;
 using Sitecore.ContentSearch.SearchTypes;
+using Sitecore.ContentSearch.Utilities;
 using Sitecore.Data;
 using Sitecore.Data.Items;
+using Sitecore.Extensions;
 using Sitecore.StringExtensions;
 using System;
 using System.Collections.Generic;
@@ -55,6 +57,16 @@ namespace TagBasedRecommender.Services
                 query = query.Filter(item => item.TemplateId == KnownSettings.SearchTemplate);
             }
 
+            if (KnownSettings.FilterStoredItems)
+            {
+                // Dedupe IDs
+                var itemIds = new HashSet<ID>();
+                GetIdsFromCookie().ForEach(id => itemIds.Add(id));
+
+                query = itemIds.Aggregate(query, (acc, id) => acc.Filter(item => item.ItemId != id));
+
+            }
+
             return query
                 .Filter(item => item.Paths.Contains(ItemIDs.ContentRoot))
                 .Filter(item => item.Language == Context.Language.Name);
@@ -63,12 +75,7 @@ namespace TagBasedRecommender.Services
 
         private IDictionary<string, float> GetTagsWeight()
         {
-            var cookieValue = HttpContext.Current.Request.Cookies[KnownSettings.Cookie.Name]?.Value ?? string.Empty;
-            var itemIds = cookieValue
-                .Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(idStr => ID.Parse(idStr, ID.Null))
-                .Where(id => !id.IsNull);
-            var tags = itemIds
+            var tags = GetIdsFromCookie()
                 .Select(id => Context.Database.GetItem(id))
                 .Where(item => item != null)
                 .SelectMany(TagsResolver.GetItemTags)
@@ -93,6 +100,16 @@ namespace TagBasedRecommender.Services
             }
 
             return tagsWeight;
+        }
+
+        private IList<ID> GetIdsFromCookie()
+        {
+            var cookieValue = HttpContext.Current.Request.Cookies[KnownSettings.Cookie.Name]?.Value ?? string.Empty;
+            return cookieValue
+                .Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(idStr => ID.Parse(idStr, ID.Null))
+                .Where(id => !id.IsNull)
+                .ToList();
         }
     }
 }
