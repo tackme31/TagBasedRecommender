@@ -22,24 +22,24 @@ namespace TagBasedRecommender.Services
             TagsResolver = tagsResolver;
         }
 
-        public List<Item> GetRecommedations(int recommendCount = 10)
+        public List<Item> GetRecommedations(int count = 10)
         {
-            if (recommendCount <= 0)
+            if (count <= 0)
             {
-                throw new InvalidOperationException($"'{recommendCount}' should be a positive integer.");
+                throw new InvalidOperationException($"'{nameof(count)}' should be a positive integer.");
             }
 
             var index = GetSearchIndex();
             using (var context = index.CreateSearchContext())
             {
-                var tags = GetTagsAndCount();
-                var boosting = tags.Keys.Aggregate(
+                var tagsWeight = GetTagsWeight();
+                var boosting = tagsWeight.Keys.Aggregate(
                     PredicateBuilder.Create<T>(item => item.Name.MatchWildcard("*").Boost(0.0f)),
-                    (acc, tag) => acc.Or(item => item[KnownSettings.SearchField].Equals(tag).Boost(tags[tag])));
+                    (acc, tag) => acc.Or(item => item[KnownSettings.SearchField].Equals(tag).Boost(tagsWeight[tag])));
 
                 var query = ApplyFilterQuery(context.GetQueryable<T>())
                     .Where(boosting)
-                    .Take(recommendCount)
+                    .Take(count)
                     .OrderByDescending(item => item["score"]);
 
                 return query.GetResults().Hits.Select(hit => hit.Document.GetItem()).ToList();
@@ -61,7 +61,7 @@ namespace TagBasedRecommender.Services
         }
 
 
-        private IDictionary<string, float> GetTagsAndCount()
+        private IDictionary<string, float> GetTagsWeight()
         {
             var cookieValue = HttpContext.Current.Request.Cookies[KnownSettings.Cookie.Name]?.Value ?? string.Empty;
             var itemIds = cookieValue
@@ -74,7 +74,7 @@ namespace TagBasedRecommender.Services
                 .SelectMany(TagsResolver.GetItemTags)
                 .Where(tag => !tag.IsNullOrEmpty());
 
-            var tagsAndCount = new Dictionary<string, float>();
+            var tagsWeight = new Dictionary<string, float>();
             foreach (var tag in tags)
             {
                 if (string.IsNullOrWhiteSpace(tag))
@@ -82,17 +82,17 @@ namespace TagBasedRecommender.Services
                     continue;
                 }
 
-                if (tagsAndCount.ContainsKey(tag))
+                if (tagsWeight.ContainsKey(tag))
                 {
-                    tagsAndCount[tag] += 1.0f * KnownSettings.BoostMultiplicand;
+                    tagsWeight[tag] += 1.0f * KnownSettings.BoostMultiplicand;
                 }
                 else
                 {
-                    tagsAndCount[tag] = 1.0f * KnownSettings.BoostMultiplicand;
+                    tagsWeight[tag] = 1.0f * KnownSettings.BoostMultiplicand;
                 }
             }
 
-            return tagsAndCount;
+            return tagsWeight;
         }
     }
 }

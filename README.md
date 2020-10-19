@@ -35,7 +35,7 @@ public class RecommendExample
 {
     public RecommendExample(IRecommendationService service)
     {
-        var recommendations = service.GetRecommendations(recommendCount: 10);
+        var recommendations = service.GetRecommendations(count: 10);
     }
 }
 ```
