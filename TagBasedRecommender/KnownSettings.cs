@@ -9,7 +9,7 @@ namespace TagBasedRecommender
 
         public static string SearchField = GetSetting("SearchField");
         public static ID SearchTemplate = MainUtil.GetID(GetSetting("SearchTemplate"), ID.Null);
-        public static int StoredItemCount = MainUtil.GetInt(GetSetting("SearchField"), 20);
+        public static int StoredItemCount = MainUtil.GetInt(GetSetting("StoredItemCount"), 20);
         public static float BoostMultiplicand = MainUtil.GetFloat(GetSetting("BoostMultiplicand"), 1.0f);
         public static class Cookie
         {
