@@ -35,7 +35,7 @@ public class RecommendExample
 {
     public RecommendExample(IRecommendationService service)
     {
-        var recommendations = service.GetRecommendations(count: 10);
+        var recommendations = service.GetRecommendations(recommendCount: 10);
     }
 }
 ```
@@ -45,8 +45,9 @@ public class RecommendExample
 |:-|:-|:-|:-|
 |`TagBasedRecommender.SearchField`|`string`|An index field name for search by tags.|`_content`|
 |`TagBasedRecommender.SearchTemplate`|`ID`|A template ID to use filtering recommendation. |empty (All templates)|
-|`TagBasedRecommender.StoredItemCount`|`int`|A length of items stored in a cookie value.|`20`|
+|`TagBasedRecommender.StoredItemCount`|`int`|A length of items stored in the cookie.|`20`|
 |`TagBasedRecommender.BoostMultiplicand`|`float`|A value to be added to boosting when a tag is matched.|`1`|
+|`TagBasedRecommender.FilterStoredItems`|`bool`|When set true, items stored in the cookie are filtered from recommendations.|`false`|
 |`TagBasedRecommender.Cookie.Name`|`string`|A cookie's name (required).|`tagbasedrec_items`|
 |`TagBasedRecommender.Cookie.Lifespan`|`int`|A cookie's lifespan to set to `Expire` attribute (in days).|`30`|
 |`TagBasedRecommender.Cookie.Domain`|`string`|A cookie's `Domain` attribute.|empty|
