@@ -34,11 +34,15 @@ namespace TagBasedRecommender.Services
             using (var context = index.CreateSearchContext())
             {
                 var query = context.GetQueryable<T>();
+                query = ApplyFilterQuery(query);
+
+                // Template filter
                 if (!KnownSettings.SearchTemplate.IsNull)
                 {
                     query = query.Filter(item => item.TemplateId == KnownSettings.SearchTemplate);
                 }
 
+                // Stored items filter
                 if (KnownSettings.FilterStoredItems)
                 {
                     // Dedupe IDs
@@ -49,17 +53,19 @@ namespace TagBasedRecommender.Services
 
                 }
 
+                // Boosting predicate
                 var tagsWeight = GetTagsWeight();
                 var boosting = tagsWeight.Keys.Aggregate(
                     PredicateBuilder.Create<T>(item => item.Name.MatchWildcard("*").Boost(0.0f)),
                     (acc, tag) => acc.Or(item => item[KnownSettings.SearchField].Equals(tag).Boost(tagsWeight[tag])));
 
-                query = ApplyFilterQuery(query)
+                return query
                     .Where(boosting)
                     .Take(count)
-                    .OrderByDescending(item => item["score"]);
-
-                return query.GetResults().Hits.Select(hit => hit.Document.GetItem()).ToList();
+                    .OrderByDescending(item => item["score"])
+                    .ToList() // remove
+                    .Select(doc => doc.GetItem())
+                    .ToList();
             }
         }
 

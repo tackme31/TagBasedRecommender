@@ -29,7 +29,6 @@ namespace TagBasedRecommender.Pipelines
                 return;
             }
 
-            // クッキーからタグ一覧を取得
             var cookie = GetCookie();
             var cookieItems = new Queue<string>(cookie.Value?.Split('|') ?? Array.Empty<string>());
             cookieItems.Enqueue(Context.Item.ID.ToShortID().ToString());
