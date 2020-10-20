@@ -41,19 +41,21 @@ public class RecommendExample
 ```
 
 ## Settings
+Note: Each setting name has `TagBasedRecommender` prefix (e.g. `TagBasedRecommender.SearchField`).
+
 |Name|Type|Description|Default|
 |:-|:-|:-|:-|
-|`TagBasedRecommender.SearchField`|`string`|An index field name for search by tags.|`_content`|
-|`TagBasedRecommender.SearchTemplate`|`ID`|A template ID to use filtering recommendation. |empty (All templates)|
-|`TagBasedRecommender.StoredItemCount`|`int`|A length of items stored in the cookie.|`20`|
-|`TagBasedRecommender.BoostMultiplicand`|`float`|A value to be added to boosting when a tag is matched.|`1`|
-|`TagBasedRecommender.FilterStoredItems`|`bool`|When set true, items stored in the cookie are filtered from recommendations.|`false`|
-|`TagBasedRecommender.Cookie.Name`|`string`|A cookie's name (required).|`tagbasedrec_items`|
-|`TagBasedRecommender.Cookie.Lifespan`|`int`|A cookie's lifespan to set to `Expire` attribute (in days).|`30`|
-|`TagBasedRecommender.Cookie.Domain`|`string`|A cookie's `Domain` attribute.|empty|
-|`TagBasedRecommender.Cookie.Path`|`string`|A cookies's `Path` attribute.|`/`|
-|`TagBasedRecommender.Cookie.Secure`|`bool`|A cookie's `Secure` Attribute.|`true`|
-|`TagBasedRecommender.Cookie.HttpOnly`|`bool`|A cookie's `HttpOnly` attribute.|`true`|
+|`SearchField`|`string`|An index field name for search by tags.|`_content`|
+|`SearchTemplate`|`ID`|A template ID to use filtering recommendation. |empty (All templates)|
+|`StoredItemCount`|`int`|A length of items stored in the cookie.|`20`|
+|`BoostMultiplicand`|`float`|A value to be added to boosting when a tag is matched.|`1`|
+|`FilterStoredItems`|`bool`|When set true, items stored in the cookie are filtered from recommendations.|`false`|
+|`Cookie.Name`|`string`|A cookie's name (required).|`tagbasedrec_items`|
+|`Cookie.Lifespan`|`int`|A cookie's lifespan to set to `Expire` attribute (in days).|`30`|
+|`Cookie.Domain`|`string`|A cookie's `Domain` attribute.|empty|
+|`Cookie.Path`|`string`|A cookies's `Path` attribute.|`/`|
+|`Cookie.Secure`|`bool`|A cookie's `Secure` Attribute.|`true`|
+|`Cookie.HttpOnly`|`bool`|A cookie's `HttpOnly` attribute.|`true`|
 
 
 ## Customization
