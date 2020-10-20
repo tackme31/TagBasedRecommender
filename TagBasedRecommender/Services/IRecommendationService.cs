@@ -5,6 +5,6 @@ namespace TagBasedRecommender.Services
 {
     public interface IRecommendationService
     {
-        List<Item> GetRecommedations(int recommendCount);
+        List<Item> GetRecommedations(int count);
     }
 }

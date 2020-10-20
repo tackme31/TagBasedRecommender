@@ -13,7 +13,7 @@ This software is tested on the following environment.
 Not released yet. Clone this repository and build it locally.
 
 ## Usage
-1. Add `Tags` field to a page template.
+1. Add a `Tags` field to a page template.
 1. (Optional) Set the template's ID to `TagBasedRecommender.SearchTemplate` settings.
 ```xml
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
@@ -26,7 +26,7 @@ Not released yet. Clone this repository and build it locally.
   </sitecore>
  </configuration>
 ```
-3. Now you can get recommendation to use `IRecommendationService.GetRecommendations` method.
+3. Now you can get recommendations with `IRecommendationService.GetRecommendations` method.
 
 ```csharp
 using TagBasedRecommender.Services;
@@ -35,7 +35,7 @@ public class RecommendExample
 {
     public RecommendExample(IRecommendationService service)
     {
-        var recommendations = service.GetRecommendations(recommendCount: 10);
+        var recommendations = service.GetRecommendations(count: 10);
     }
 }
 ```
@@ -98,4 +98,4 @@ WIP
 - Takumi Yamada (xirtardauq@gmail.com)
 
 ## License
-*Tag Based Recommender* is licensed unther the MIT license. See LICENSE.txt.
+*Tag Based Recommender* is licensed under the MIT license. See LICENSE.txt.
