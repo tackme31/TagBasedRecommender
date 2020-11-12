@@ -1,7 +1,9 @@
 ﻿using Sitecore;
+using Sitecore.Data.Items;
 using Sitecore.Pipelines.HttpRequest;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 
 namespace TagBasedRecommender.Pipelines
@@ -19,7 +21,7 @@ namespace TagBasedRecommender.Pipelines
                 return;
             }
 
-            if (!KnownSettings.SearchTemplate.IsNull && Context.Item.TemplateID != KnownSettings.SearchTemplate)
+            if (KnownSettings.SearchTemplates.All(id => id != Context.Item.TemplateID))
             {
                 return;
             }

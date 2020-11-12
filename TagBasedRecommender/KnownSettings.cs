@@ -1,5 +1,6 @@
 ﻿using Sitecore;
 using Sitecore.Data;
+using System.Linq;
 
 namespace TagBasedRecommender
 {
@@ -8,7 +9,7 @@ namespace TagBasedRecommender
         private static string GetSetting(string name, string @default = null) => Sitecore.Configuration.Settings.GetSetting($"TagBasedRecommender.{name}", @default);
 
         public static string SearchField = GetSetting("SearchField");
-        public static ID SearchTemplate = MainUtil.GetID(GetSetting("SearchTemplate"), ID.Null);
+        public static ID[] SearchTemplates = GetSetting("SearchTemplates", string.Empty).Split('|').Select(id => MainUtil.GetID(id, ID.Null)).ToArray();
         public static int StoredItemCount = MainUtil.GetInt(GetSetting("StoredItemCount"), 20);
         public static float BoostMultiplicand = MainUtil.GetFloat(GetSetting("BoostMultiplicand"), 1.0f);
         public static bool FilterStoredItems = MainUtil.GetBool(GetSetting("FilterStoredItems"), false);
