@@ -37,9 +37,12 @@ namespace TagBasedRecommender.Services
                 query = ApplyFilterQuery(query);
 
                 // Template filtering
-                if (!KnownSettings.SearchTemplate.IsNull)
+                if (!KnownSettings.SearchTemplates.Any())
                 {
-                    query = query.Filter(item => item.TemplateId == KnownSettings.SearchTemplate);
+                    var templatesPred = KnownSettings.SearchTemplates.Aggregate(
+                        PredicateBuilder.False<T>(),
+                        (acc, id) => acc.Or(item => item.TemplateId == id));
+                    query = query.Filter(templatesPred);
                 }
 
                 // Stored items filtering
