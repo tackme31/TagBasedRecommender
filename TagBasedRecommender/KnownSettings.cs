@@ -12,6 +12,7 @@ namespace TagBasedRecommender
         public static int StoredItemCount = MainUtil.GetInt(GetSetting("StoredItemCount"), 20);
         public static float BoostMultiplicand = MainUtil.GetFloat(GetSetting("BoostMultiplicand"), 1.0f);
         public static bool FilterStoredItems = MainUtil.GetBool(GetSetting("FilterStoredItems"), false);
+        public static bool FilterContextItem = MainUtil.GetBool(GetSetting("FilterContextItem"), true);
         public static class Cookie
         {
             public static string Name = GetSetting("Cookie.Name");

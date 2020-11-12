@@ -36,13 +36,13 @@ namespace TagBasedRecommender.Services
                 var query = context.GetQueryable<T>();
                 query = ApplyFilterQuery(query);
 
-                // Template filter
+                // Template filtering
                 if (!KnownSettings.SearchTemplate.IsNull)
                 {
                     query = query.Filter(item => item.TemplateId == KnownSettings.SearchTemplate);
                 }
 
-                // Stored items filter
+                // Stored items filtering
                 if (KnownSettings.FilterStoredItems)
                 {
                     // Dedupe IDs
@@ -51,6 +51,12 @@ namespace TagBasedRecommender.Services
 
                     query = itemIds.Aggregate(query, (acc, id) => acc.Filter(item => item.ItemId != id));
 
+                }
+
+                // Context item filtering
+                if (KnownSettings.FilterContextItem)
+                {
+                    query = query.Filter(item => item.ItemId != Context.Item.ID);
                 }
 
                 // Boosting predicate
