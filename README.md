@@ -50,6 +50,7 @@ Note: Each setting name has `TagBasedRecommender` prefix (e.g. `TagBasedRecommen
 |`StoredItemCount`|`int`|A length of items stored in the cookie.|`20`|
 |`BoostMultiplicand`|`float`|A value to be added to boosting when a tag is matched.|`1`|
 |`FilterStoredItems`|`bool`|When set true, items stored in the cookie are filtered from recommendations.|`false`|
+|`FilterContextItem`|`bool`|When set true, a context item is filtered from recommendations.|`true`|
 |`Cookie.Name`|`string`|A cookie's name (required).|`tagbasedrec_items`|
 |`Cookie.Lifespan`|`int`|A cookie's lifespan to set to `Expire` attribute (in days).|`30`|
 |`Cookie.Domain`|`string`|A cookie's `Domain` attribute.|empty|
