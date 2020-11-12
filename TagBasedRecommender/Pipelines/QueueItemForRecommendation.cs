@@ -21,7 +21,7 @@ namespace TagBasedRecommender.Pipelines
                 return;
             }
 
-            if (KnownSettings.SearchTemplates.All(id => id != Context.Item.TemplateID))
+            if (KnownSettings.SearchTemplates.Any() && KnownSettings.SearchTemplates.All(id => id != Context.Item.TemplateID))
             {
                 return;
             }
