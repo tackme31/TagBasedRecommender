@@ -46,7 +46,7 @@ Note: Each setting name has `TagBasedRecommender` prefix (e.g. `TagBasedRecommen
 |Name|Type|Description|Default|
 |:-|:-|:-|:-|
 |`SearchField`|`string`|An index field name for search by tags.|`_content`|
-|`SearchTemplates`|`ID`|Template IDs to use filtering recommendation. |empty (All templates)|
+|`SearchTemplates`|`ID[]`|Template IDs to use filtering recommendation. |empty (All templates)|
 |`StoredItemCount`|`int`|A length of items stored in the cookie.|`20`|
 |`BoostMultiplicand`|`float`|A value to be added to boosting when a tag is matched.|`1`|
 |`FilterStoredItems`|`bool`|When set true, items stored in the cookie are filtered from recommendations.|`false`|
